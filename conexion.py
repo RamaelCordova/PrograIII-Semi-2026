@@ -15,7 +15,8 @@ class Conexion:
                 host=self.host,
                 user=self.user,
                 password=self.password,
-                database=self.database
+                database=self.database,
+                autocommit=True
             )
             if self.conexion.is_connected():
                 print("Conexion exitosa")
@@ -24,20 +25,26 @@ class Conexion:
         except Error as e:
             print(f"Error al conectar a la base de datos: {e}")
 
-    def consultar(self, sql):
+    def consultar(self, sql, datos=None):
         try:
             cursor = self.conexion.cursor(dictionary=True)
-            cursor.execute(sql)
-            return cursor.fetchall()
+            if datos:
+                cursor.execute(sql, datos)
+            else:
+                cursor.execute(sql)
+            resultado = cursor.fetchall()
+            cursor.close()
+            return resultado
         except Error as e:
             print(f"Error al consultar la base de datos: {e}")
             return None
 
-    def ejecutar(self, sql, datos):
+    def ejecutar(self, sql, datos=()):
         try:
             cursor = self.conexion.cursor()
             cursor.execute(sql, datos)
             self.conexion.commit()
+            cursor.close()
             return 'ok'
         except Error as e:
             print(f"Error al ejecutar la consulta: {e}")

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión y Registro de Usuarios</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            --header-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            --surface-bg: #f8fafc;
+            --card-border: #e2e8f0;
+            --text-dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--surface-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Navbar personalizado */
+        .navbar-custom {
+            background: var(--header-gradient);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .navbar-custom .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tarjetas */
+        .card-custom {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-header-gradient {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.25rem 1.5rem;
+            border-bottom: none;
+        }
+
+        .card-header-gradient h5 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        /* Formularios */
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            padding: 0.65rem 0.9rem;
+            font-size: 0.925rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .input-group-text {
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Botones */
+        .btn-primary-custom {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0.65rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-primary-custom:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+            color: white;
+        }
+
+        .btn-light-custom {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.65rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-light-custom:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        /* Tabla estilizada */
+        .table-custom {
+            margin-bottom: 0;
+        }
+
+        .table-custom thead th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.825rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-custom tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .table-custom td {
+            padding: 0.9rem 1rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .badge-user {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        /* Notificación Toast/Alerta flotante */
+        #alertNotification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 320px;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Notificación emergente -->
+    <div id="alertNotification" class="alert alert-dismissible fade show" role="alert">
+        <span id="alertMessage"></span>
+        <button type="button" class="btn-close" onclick="cerrarAlerta()"></button>
+    </div>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/index.html">
+                <i class="bi bi-shield-lock-fill fs-4 text-warning"></i>
+                <span>Sistema de Impuestos & Usuarios</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/index.html">
+                            <i class="bi bi-people me-1"></i> Clientes & Impuestos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/usuarios.html">
+                            <i class="bi bi-person-badge me-1"></i> Formulario de Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item" id="navItemUsuarioActivo" style="display:none;">
+                        <span class="badge bg-light text-primary py-2 px-3 fw-normal" id="lblUsuarioActivo"></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-semibold" href="/login.html" onclick="sessionStorage.removeItem('usuarioActivo')">
+                            <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main class="container-fluid px-4 pb-5">
+        <div class="row g-4">
+            
+            <!-- Columna Izquierda: Formulario de Registro de Usuarios -->
+            <div class="col-lg-5 col-xl-4">
+                <div class="card card-custom">
+                    <div class="card-header-gradient d-flex justify-content-between align-items-center">
+                        <h5 id="formTitulo" class="d-flex align-items-center gap-2">
+                            <i class="bi bi-person-plus-fill"></i> Registrar Usuario
+                        </h5>
+                        <span id="badgeEstadoForm" class="badge bg-light text-primary fw-bold">Modo: Nuevo</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="frmUsuario" autocomplete="off">
+                            <!-- Campo oculto para ID de Usuario -->
+                            <input type="hidden" id="txtIdUsuario" name="txtIdUsuario" value="">
+
+                            <!-- Campo: Nombre de Usuario -->
+                            <div class="mb-3">
+                                <label for="txtUsuario" class="form-label">
+                                    <i class="bi bi-person-fill text-primary me-1"></i> Nombre de Usuario (Login) *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                    <input type="text" class="form-control" id="txtUsuario" name="txtUsuario" 
+                                           placeholder="Ej: rcordova / admin" required maxlength="35"
+                                           pattern="^[a-zA-Z0-9_.-]{3,35}$"
+                                           title="Mínimo 3 caracteres alfanuméricos, guiones o puntos">
+                                </div>
+                                <div class="form-text">Identificador único para iniciar sesión.</div>
+                            </div>
+
+                            <!-- Campo: Clave / Contraseña -->
+                            <div class="mb-3">
+                                <label for="txtClave" class="form-label">
+                                    <i class="bi bi-key-fill text-primary me-1"></i> Contraseña *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" class="form-control" id="txtClave" name="txtClave" 
+                                           placeholder="Ingrese la contraseña" required maxlength="35">
+                                    <button class="btn btn-outline-secondary" type="button" id="btnToggleClave" onclick="togglePasswordVisibility()">
+                                        <i class="bi bi-eye" id="iconToggleClave"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">Contraseña de acceso para el usuario.</div>
+                            </div>
+
+                            <!-- Campo: Nombre Completo -->
+                            <div class="mb-3">
+                                <label for="txtNombre" class="form-label">
+                                    <i class="bi bi-card-heading text-primary me-1"></i> Nombre Completo *
+                                </label>
+                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" 
+                                       placeholder="Ej: Juan Antonio Pérez Gómez" required maxlength="85"
+                                       pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]{3,85}$"
+                                       title="Solo letras y espacios, mínimo 3 caracteres">
+                            </div>
+
+                            <!-- Campo: Dirección -->
+                            <div class="mb-3">
+                                <label for="txtDireccion" class="form-label">
+                                    <i class="bi bi-geo-alt-fill text-primary me-1"></i> Dirección
+                                </label>
+                                <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" 
+                                       placeholder="Ej: Calle Principal #123, San Salvador" maxlength="100">
+                            </div>
+
+                            <!-- Campo: Teléfono -->
+                            <div class="mb-4">
+                                <label for="txtTelefono" class="form-label">
+                                    <i class="bi bi-telephone-fill text-primary me-1"></i> Teléfono
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" 
+                                           placeholder="Ej: 7777-8888" maxlength="9"
+                                           pattern="^[0-9]{4}-[0-9]{4}$"
+                                           title="Formato requerido: 0000-0000">
+                                </div>
+                                <div class="form-text">Formato: 4 dígitos, guión, 4 dígitos (Ej: 7777-8888).</div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" id="btnGuardar" class="btn btn-primary-custom d-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-save2"></i> <span id="lblBtnGuardar">Guardar Usuario</span>
+                                </button>
+                                <button type="button" id="btnLimpiar" class="btn btn-light-custom d-flex align-items-center justify-content-center gap-2" onclick="limpiarFormulario()">
+                                    <i class="bi bi-arrow-counterclockwise"></i> <span>Limpiar Formulario</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Búsqueda y Lista de Usuarios Registrados -->
+            <div class="col-lg-7 col-xl-8">
+                <div class="card card-custom">
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <h5 class="mb-0 text-dark fw-bold d-flex align-items-center gap-2">
+                                <i class="bi bi-people-fill text-primary"></i> Directorio de Usuarios Registrados
+                            </h5>
+                            <small class="text-muted">Lista y búsqueda en tiempo real de usuarios almacenados</small>
+                        </div>
+                        <span id="lblTotalUsuarios" class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">
+                            0 usuarios encontrados
+                        </span>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <!-- Barra de Búsqueda -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-muted"></i>
+                                    </span>
+                                    <input type="search" id="txtBuscarUsuario" class="form-control border-start-0 ps-0" 
+                                           placeholder="Buscar por nombre de usuario, nombre completo o teléfono...">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="obtenerUsuarios('')">
+                                        <i class="bi bi-arrow-clockwise"></i> Recargar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabla Responsiva de Usuarios -->
+                        <div class="table-responsive">
+                            <table class="table table-custom align-middle">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 70px;">ID</th>
+                                        <th>Usuario</th>
+                                        <th>Nombre Completo</th>
+                                        <th>Teléfono</th>
+                                        <th>Dirección</th>
+                                        <th class="text-center" style="width: 130px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblUsuarios">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                            Cargando usuarios...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript para interacción con la API Python -->
+    <script>
+        // Variables de estado del formulario
+        let accion = 'nuevo';
+        let usuariosMap = {}; // Caché de usuarios en memoria por ID
+
+        // Referencias del DOM
+        const frmUsuario = document.getElementById('frmUsuario');
+        const txtIdUsuario = document.getElementById('txtIdUsuario');
+        const txtUsuario = document.getElementById('txtUsuario');
+        const txtClave = document.getElementById('txtClave');
+        const txtNombre = document.getElementById('txtNombre');
+        const txtDireccion = document.getElementById('txtDireccion');
+        const txtTelefono = document.getElementById('txtTelefono');
+        const txtBuscarUsuario = document.getElementById('txtBuscarUsuario');
+        const tblUsuarios = document.getElementById('tblUsuarios');
+        const formTitulo = document.getElementById('formTitulo');
+        const badgeEstadoForm = document.getElementById('badgeEstadoForm');
+        const lblBtnGuardar = document.getElementById('lblBtnGuardar');
+        const lblTotalUsuarios = document.getElementById('lblTotalUsuarios');
+
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar si hay sesión iniciada
+            const usuarioActivo = sessionStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                try {
+                    const u = JSON.parse(usuarioActivo);
+                    const navItem = document.getElementById('navItemUsuarioActivo');
+                    const lbl = document.getElementById('lblUsuarioActivo');
+                    if (navItem && lbl) {
+                        lbl.innerHTML = `<i class="bi bi-person-check-fill me-1"></i> Sesión: <strong>@${escapeHtml(u.usuario)}</strong>`;
+                        navItem.style.display = 'block';
+                    }
+                } catch(e) {}
+            }
+
+            obtenerUsuarios();
+
+            // Evento submit del formulario
+            frmUsuario.addEventListener('submit', (e) => {
+                e.preventDefault();
+                guardarUsuario();
+            });
+
+            // Búsqueda en tiempo real
+            txtBuscarUsuario.addEventListener('input', (e) => {
+                obtenerUsuarios(e.target.value.trim());
+            });
+        });
+
+        // Alternar visibilidad de contraseña
+        function togglePasswordVisibility() {
+            const icon = document.getElementById('iconToggleClave');
+            if (txtClave.type === 'password') {
+                txtClave.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                txtClave.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+
+        // Mostrar notificación tipo Toast / Alert
+        function mostrarAlerta(mensaje, tipo = 'success') {
+            const alertBox = document.getElementById('alertNotification');
+            const alertMessage = document.getElementById('alertMessage');
+            alertBox.className = `alert alert-${tipo} alert-dismissible fade show`;
+            alertMessage.innerHTML = `<strong>${tipo === 'success' ? 'Éxito:' : 'Atención:'}</strong> ${mensaje}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                cerrarAlerta();
+            }, 4500);
+        }
+
+        function cerrarAlerta() {
+            const alertBox = document.getElementById('alertNotification');
+            alertBox.style.display = 'none';
+        }
+
+        /**
+         * 1. RECOGER DATOS DEL FORMULARIO Y ENVIARLOS A PYTHON
+         * Envía los datos mediante fetch (POST) al endpoint /usuario
+         */
+        async function guardarUsuario() {
+            // Recoger datos de los inputs del formulario
+            const datos = {
+                idUsuario: txtIdUsuario.value,
+                usuario: txtUsuario.value.trim(),
+                clave: txtClave.value,
+                nombre: txtNombre.value.trim(),
+                direccion: txtDireccion.value.trim(),
+                telefono: txtTelefono.value.trim(),
+                accion: accion
+            };
+
+            // Validaciones básicas de cliente
+            if (!datos.usuario || !datos.clave || !datos.nombre) {
+                mostrarAlerta('Por favor completa todos los campos requeridos (*).', 'warning');
+                return;
+            }
+
+            try {
+                // Deshabilitar botón durante el envío
+                const btnGuardar = document.getElementById('btnGuardar');
+                btnGuardar.disabled = true;
+                btnGuardar.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Procesando...`;
+
+                // Petición HTTP POST al servidor Python
+                const response = await fetch('/usuario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const resultado = await response.json();
+
+                if (resultado.msg === 'ok') {
+                    const mensaje = accion === 'nuevo' 
+                        ? 'Usuario registrado exitosamente.' 
+                        : 'Usuario actualizado correctamente.';
+                    mostrarAlerta(mensaje, 'success');
+                    limpiarFormulario();
+                    obtenerUsuarios(txtBuscarUsuario.value);
+                } else {
+                    mostrarAlerta(resultado.msg || resultado.error || 'Ocurrió un error al procesar el usuario.', 'danger');
+                }
+            } catch (error) {
+                console.error('Error al enviar datos a Python:', error);
+                mostrarAlerta('No se pudo establecer conexión con el servidor Python.', 'danger');
+            } finally {
+                const btnGuardar = document.getElementById('btnGuardar');
+                btnGuardar.disabled = false;
+                actualizarBotonGuardar();
+            }
+        }
+
+        /**
+         * 2. OBTENER LISTA DE USUARIOS DESDE PYTHON (GET /usuarios)
+         */
+        async function obtenerUsuarios(buscar = "") {
+            try {
+                const response = await fetch(`/usuarios?buscar=${encodeURIComponent(buscar)}`);
+                const datos = await response.json();
+
+                if (Array.isArray(datos)) {
+                    renderizarTablaUsuarios(datos);
+                } else if (datos.error) {
+                    tblUsuarios.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">${datos.error}</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Error al consultar usuarios:', error);
+                tblUsuarios.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Error al cargar usuarios desde el servidor.</td></tr>`;
+            }
+        }
+
+        /**
+         * 3. RENDERIZAR TABLA DE USUARIOS EN EL DOM
+         */
+        function renderizarTablaUsuarios(lista) {
+            usuariosMap = {};
+            lblTotalUsuarios.innerText = `${lista.length} usuario(s) encontrado(s)`;
+
+            if (lista.length === 0) {
+                tblUsuarios.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+                            No se encontraron usuarios registrados.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let filasHtml = '';
+            lista.forEach(u => {
+                usuariosMap[u.idUsuario] = u;
+                filasHtml += `
+                    <tr>
+                        <td><span class="badge bg-light text-dark border">#${u.idUsuario}</span></td>
+                        <td>
+                            <span class="badge-user">
+                                <i class="bi bi-at"></i>${escapeHtml(u.usuario)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark">${escapeHtml(u.nombre)}</div>
+                        </td>
+                        <td>
+                            ${u.telefono ? `<span class="text-nowrap"><i class="bi bi-telephone text-muted me-1"></i>${escapeHtml(u.telefono)}</span>` : '<span class="text-muted fst-italic">Sin teléfono</span>'}
+                        </td>
+                        <td>
+                            <span class="text-muted">${escapeHtml(u.direccion || 'No especificada')}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-primary" title="Editar Usuario" onclick="cargarParaModificar(${u.idUsuario})">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" title="Eliminar Usuario" onclick="eliminarUsuario(${u.idUsuario})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tblUsuarios.innerHTML = filasHtml;
+        }
+
+        /**
+         * 4. CARGAR DATOS EN EL FORMULARIO PARA MODIFICAR
+         */
+        function cargarParaModificar(id) {
+            const usuario = usuariosMap[id];
+            if (!usuario) return;
+
+            accion = 'modificar';
+            txtIdUsuario.value = usuario.idUsuario;
+            txtUsuario.value = usuario.usuario;
+            txtClave.value = usuario.clave;
+            txtNombre.value = usuario.nombre;
+            txtDireccion.value = usuario.direccion || '';
+            txtTelefono.value = usuario.telefono || '';
+
+            // Actualizar interfaz visual
+            formTitulo.innerHTML = `<i class="bi bi-pencil-square"></i> Modificar Usuario #${usuario.idUsuario}`;
+            badgeEstadoForm.className = 'badge bg-warning text-dark fw-bold';
+            badgeEstadoForm.innerText = 'Modo: Modificar';
+            actualizarBotonGuardar();
+
+            // Scroll suave hacia el formulario
+            document.querySelector('.card-custom').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * 5. ELIMINAR USUARIO
+         */
+        async function eliminarUsuario(id) {
+            const usuario = usuariosMap[id];
+            if (!usuario) return;
+
+            if (confirm(`¿Está seguro de eliminar al usuario "${usuario.nombre}" (@${usuario.usuario})?`)) {
+                try {
+                    const datos = {
+                        idUsuario: id,
+                        accion: 'eliminar'
+                    };
+
+                    const response = await fetch('/usuario', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    });
+
+                    const resultado = await response.json();
+
+                    if (resultado.msg === 'ok') {
+                        mostrarAlerta('Usuario eliminado satisfactoriamente.', 'success');
+                        if (txtIdUsuario.value == id) {
+                            limpiarFormulario();
+                        }
+                        obtenerUsuarios(txtBuscarUsuario.value);
+                    } else {
+                        mostrarAlerta(resultado.msg || 'Error al eliminar el usuario.', 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar usuario:', error);
+                    mostrarAlerta('Error de conexión al eliminar usuario.', 'danger');
+                }
+            }
+        }
+
+        /**
+         * 6. LIMPIAR FORMULARIO
+         */
+        function limpiarFormulario() {
+            accion = 'nuevo';
+            txtIdUsuario.value = '';
+            frmUsuario.reset();
+            formTitulo.innerHTML = `<i class="bi bi-person-plus-fill"></i> Registrar Usuario`;
+            badgeEstadoForm.className = 'badge bg-light text-primary fw-bold';
+            badgeEstadoForm.innerText = 'Modo: Nuevo';
+            actualizarBotonGuardar();
+        }
+
+        function actualizarBotonGuardar() {
+            const icon = accion === 'nuevo' ? 'bi-save2' : 'bi-check2-circle';
+            const texto = accion === 'nuevo' ? 'Guardar Usuario' : 'Actualizar Usuario';
+            lblBtnGuardar.innerHTML = `<i class="bi ${icon}"></i> ${texto}`;
+        }
+
+        // Utilidad para prevenir inyección XSS en renderizado HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+
+</html>

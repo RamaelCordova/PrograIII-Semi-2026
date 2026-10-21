@@ -9,6 +9,19 @@
 </head>
 
 <body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 px-3 shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/index.html">Sistema de Gestión & Impuestos</a>
+            <div class="navbar-nav ms-auto gap-2 align-items-center">
+                <a class="nav-link active fw-semibold" href="/index.html">Clientes & Impuestos</a>
+                <a class="nav-link fw-semibold" href="/usuarios.html">Gestión de Usuarios</a>
+                <span class="text-white-50 small ms-2" id="lblUsuarioNavbar" style="display:none;"></span>
+                <a class="btn btn-outline-warning btn-sm ms-2" href="/login.html" onclick="sessionStorage.removeItem('usuarioActivo')">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container-fluid mt-3">
         <div class="row">
             <!-- Formulario Registro Cliente -->

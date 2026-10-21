@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="col">
                                         <label>Balance Anual ($)</label>
-                                        <input type="number" step="0.01" id="txtBalance" class="form-control" placeholder="0.00" oninput="calcularImpuesto()">
+                                        <input type="number" step="0.01" id="txtBalance" class="form-control" placeholder="0.00" oninput="calcularImpuesto()" onkeyup="calcularImpuesto()">
                                     </div>
                                 </div>
                                 <div class="row mb-2">
@@ -151,10 +151,11 @@
         </div>
     </div>
 
-    <!-- Script JS integrado -->
+    <!-- Script JS integrado corregido -->
     <script>
         var accion = 'nuevo', idCliente = '', idClienteImpuesto = '';
         var precioCalculado = 0;
+        var clientesMap = {}; // Diccionario para almacenar los clientes de manera segura por ID
 
         frmCliente.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -185,16 +186,18 @@
         }
 
         function mostrarDatos(datos) {
+            clientesMap = {}; // Limpiar mapa anterior
             let filas = "";
             datos.forEach(e => {
+                clientesMap[e.idCliente] = e; // Guardar el cliente usando su ID como llave
                 filas += `
                 <tr>
-                    <td onClick='modificarCliente(${JSON.stringify(e)}, event)' style="cursor:pointer;">${e.codigo}</td>
-                    <td onClick='modificarCliente(${JSON.stringify(e)}, event)' style="cursor:pointer;">${e.nombre}</td>
+                    <td onclick='modificarCliente(${e.idCliente}, event)' style="cursor:pointer;">${e.codigo}</td>
+                    <td onclick='modificarCliente(${e.idCliente}, event)' style="cursor:pointer;">${e.nombre}</td>
                     <td>${e.tipo}</td>
                     <td>
-                        <input onClick='eliminarCliente(${JSON.stringify(e)}, event)' type="button" value="DEL" class="btn btn-danger btn-sm"/>
-                        <input onClick='abrirImpuestos(${JSON.stringify(e)}, event)' type="button" value="Impuestos" class="btn btn-info btn-sm"/>
+                        <input onclick='eliminarCliente(${e.idCliente}, event)' type="button" value="DEL" class="btn btn-danger btn-sm"/>
+                        <input onclick='abrirImpuestos(${e.idCliente}, event)' type="button" value="Impuestos" class="btn btn-info btn-sm"/>
                     </td>
                 </tr>
                 `;
@@ -202,8 +205,10 @@
             tblClientes.innerHTML = filas;
         }
 
-        function modificarCliente(data, event) {
+        function modificarCliente(id, event) {
             event.preventDefault();
+            let data = clientesMap[id];
+            if (!data) return;
             idCliente = data.idCliente;
             accion = "modificar";
             txtCodigoCliente.value = data.codigo;
@@ -214,8 +219,10 @@
             cboTipoPersona.value = data.tipo;
         }
 
-        function eliminarCliente(data, event) {
+        function eliminarCliente(id, event) {
             event.preventDefault();
+            let data = clientesMap[id];
+            if (!data) return;
             if (confirm(`¿Seguro de eliminar al cliente: ${data.nombre}?`)) {
                 idCliente = data.idCliente;
                 accion = "eliminar";
@@ -261,8 +268,11 @@
             document.getElementById('panelImpuesto').style.display = 'none';
         }
 
-        function abrirImpuestos(data, event) {
+        function abrirImpuestos(id, event) {
             event.preventDefault();
+            let data = clientesMap[id];
+            if (!data) return;
+
             if (data.tipo !== 'empresa') {
                 alert("El Impuesto a las Actividades Económicas requiere un cliente de tipo empresa.");
                 return;
